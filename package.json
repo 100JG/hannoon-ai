@@ -4,6 +4,7 @@
   "private": true,
   "type": "module",
   "scripts": {
+    "pretest": "node scripts/build-mcp-view.mjs",
     "build": "node scripts/build-file-input.mjs && node scripts/build-mcp-view.mjs && node scripts/build.mjs",
     "test": "node --test tests/*.test.mjs chrome-extension/tests/*.test.mjs",
     "dev": "wrangler dev --local",
@@ -27,3 +28,4 @@
     "wrangler": "^4.151.2"
   }
 }
+
