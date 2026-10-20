@@ -89,6 +89,7 @@ test('key-only provider selection supports Gemini, OpenAI and Anthropic adapters
     const ir=fixture(),seen=[];const state=await advance(initialState(SOURCE),{LLM_API_KEY:key},{fetchImpl:scripted([ir],seen)});
     assert.equal(state.stage,'verify');assert.equal(seen.length,1);
     assert.ok(!seen[0].url.includes(key));assert.ok(!seen[0].options.body.includes(key));
+    assert.equal(seen[0].options.redirect,'manual');
     if(key.startsWith('AQ.'))assert.match(seen[0].url,/generativelanguage\.googleapis\.com/);
     assert.ok(Object.values(seen[0].options.headers).some(v=>v.includes(key)));
   }

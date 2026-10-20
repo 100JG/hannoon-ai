@@ -151,7 +151,7 @@ async function inference(state,env,system,payload,schema,fetchImpl,verification=
   }
   state.api_calls++;
   let response;
-  try{response=await fetchImpl(url,{method:'POST',headers,body:JSON.stringify(body),signal:AbortSignal.timeout(60000),redirect:'error'});}catch{throw new Error('AI 응답을 기다리지 못했습니다. 잠시 후 다시 실행해 주세요.');}
+  try{response=await fetchImpl(url,{method:'POST',headers,body:JSON.stringify(body),signal:AbortSignal.timeout(60000),redirect:'manual'});}catch{throw new Error('AI 응답을 기다리지 못했습니다. 잠시 후 다시 실행해 주세요.');}
   if(!response.ok)throw new Error(response.status===429?'AI 서비스가 혼잡합니다. 잠시 후 다시 실행해 주세요.':'AI 연결을 확인하지 못했습니다. 잠시 후 다시 실행해 주세요.');
   const raw=await response.text();if(raw.length>200000)throw new Error('AI 응답이 너무 큽니다. 원문을 나누어 입력해 주세요.');
   let data;try{data=JSON.parse(raw);}catch{throw new Error('AI 응답 형식을 확인하지 못했습니다. 다시 실행해 주세요.');}

@@ -6,7 +6,7 @@
 
 ## 웹에서 사용하기
 
-1. 한눈AI 서비스 주소를 여세요.
+1. [한눈AI 서비스](https://hannoon-ai-diagram.jgbaek100.chatgpt.site)를 여세요.
 2. 텍스트 또는 공개 웹페이지 URL을 붙여넣거나 파일을 선택하세요.
 3. **다이어그램 만들기**를 누르세요.
 4. 결과를 확인하고 **이미지 복사** 또는 **PNG 다운로드**를 사용하세요.
@@ -60,44 +60,57 @@ AI의 해석에는 차이가 있을 수 있으므로 중요한 조건·숫자·�
 
 ## MCP로 AI 채팅에 연결하기
 
-MCP는 AI 채팅에 한눈AI 도구를 추가하는 기능입니다. 한눈AI 계정이나 AI API 키는 필요 없습니다. 이용 중인 AI 채팅 서비스의 계정·요금제·권한은 별도입니다.
+MCP는 AI 채팅에 한눈AI 도구를 추가하는 기능입니다. 별도의 한눈AI 회원가입이나 AI API 키 입력은 없습니다. 이용 중인 AI 채팅 서비스의 계정·요금제·연결 권한은 별도입니다.
 
-MCP 주소는 **서비스 주소 + `/mcp`**입니다. 웹 가이드의 **주소 복사**를 사용하세요. `localhost`·`127.0.0.1`은 그 PC에서만 접근되므로 ChatGPT나 다른 PC에는 공개 HTTPS 주소가 필요합니다.
+| 연결 주소 | 인증 방식 |
+|---|---|
+| 공개 서비스의 `chatgpt.site` 주소 | 플랫폼 OAuth. 기존 플랫폼 계정으로 로그인하고 연결을 승인합니다. |
+| 직접 운영하는 Workers 주소 | 기본 인증 없음. 한눈AI 로그인은 요구하지 않습니다. |
 
-### ChatGPT 웹
+MCP 주소는 **서비스 주소 + `/mcp`**입니다. 웹 사용가이드의 **주소 복사**를 사용하세요. 가이드는 접속한 주소에 맞는 인증 방식과 명령을 표시합니다. `localhost`·`127.0.0.1`은 그 PC에서만 접근되므로 ChatGPT나 다른 PC에는 공개 HTTPS 주소가 필요합니다.
 
-1. **설정 → 앱**에서 만들기 또는 사용자 지정 앱 추가 항목을 찾습니다.
+### ChatGPT 웹에서 공개 서비스 연결
+
+1. **설정 → 앱**에서 한눈AI가 이미 표시되면 연결을 진행하세요. 새로 추가하려면 만들기 또는 사용자 지정 앱 추가 항목을 찾습니다.
 2. 계정에서 요구하면 고급 설정의 개발자 모드를 켭니다. 조직 계정은 관리자 허용이 필요할 수 있습니다.
-3. 이름을 **한눈AI**, 서버 주소를 가이드에서 복사한 MCP 주소로 입력합니다.
-4. 인증 방식은 **인증 없음**을 선택합니다.
-5. 도구 검색·앱 추가와 필요한 연결 승인을 마칩니다.
-6. 새 채팅에서 앱 메뉴 또는 **@한눈AI**로 선택하고 “다음 내용을 한눈AI로 정리해 줘”라고 요청합니다.
+3. 이름을 **한눈AI**, 서버 주소를 아래 주소로 입력합니다.
+
+```text
+https://hannoon-ai-diagram.jgbaek100.chatgpt.site/mcp
+```
+
+4. 인증 방식은 **OAuth**를 선택합니다.
+5. 열린 플랫폼 인증 화면에서 기존 계정으로 로그인하고 연결 권한을 승인합니다. 한눈AI용 새 계정이나 AI API 키는 만들지 않습니다.
+6. 도구 검색·앱 추가를 마친 뒤 새 채팅에서 앱 메뉴 또는 **@한눈AI**로 선택하고 “다음 내용을 한눈AI로 정리해 줘”라고 요청합니다.
 
 메뉴 제공 여부는 ChatGPT 계정·요금제·조직 정책에 따라 다릅니다. 메뉴가 없다면 한눈AI 웹 또는 Chrome 확장을 이용하세요. 앱에 따라 이미지 표시 방식도 달라질 수 있습니다.
 
 [공식 OpenAI 연결 안내](https://developers.openai.com/plugins/deploy/connect-chatgpt)
 
-### Codex CLI
-
-아래 주소를 실제 서비스 주소로 바꾸세요. 웹 가이드에는 현재 주소가 반영된 명령이 표시됩니다.
+### Codex CLI에서 공개 서비스 연결
 
 ```text
-codex mcp add hannoon --url https://YOUR-SERVICE.example/mcp
+codex mcp add hannoon --url https://hannoon-ai-diagram.jgbaek100.chatgpt.site/mcp
+codex mcp login hannoon
 ```
 
-`codex mcp list`로 확인한 뒤 채팅에서 한눈AI 도구를 사용해 달라고 요청하세요.
+두 번째 명령이 여는 플랫폼 로그인 창에서 기존 계정으로 인증하고 권한을 승인하세요. `codex mcp list`로 확인한 뒤 채팅에서 한눈AI 도구를 사용해 달라고 요청하세요.
 
 [공식 Codex MCP 안내](https://learn.chatgpt.com/docs/extend/mcp?surface=cli)
 
-### Claude Code
+### Claude Code에서 공개 서비스 연결
 
 ```text
-claude mcp add --transport http hannoon https://YOUR-SERVICE.example/mcp
+claude mcp add --transport http hannoon https://hannoon-ai-diagram.jgbaek100.chatgpt.site/mcp
 ```
 
-실제 주소로 바꾸어 실행하고 Claude Code 채팅에서 `/mcp`를 입력해 연결 상태를 확인합니다. 필요한 실행 승인은 사용자가 진행합니다.
+Claude Code 채팅에서 `/mcp`를 입력하고 한눈AI의 인증 항목을 선택하세요. 열린 브라우저에서 기존 플랫폼 계정으로 로그인하고 연결 권한을 승인합니다.
 
 [공식 Claude Code MCP 안내](https://code.claude.com/docs/en/mcp)
+
+### 직접 운영하는 Workers 주소에 연결
+
+운영자가 안내한 주소나 그 웹 가이드의 MCP 주소를 사용하세요. 기본 인증 방식은 **인증 없음**입니다. Codex는 주소 추가 후 로그인 명령 없이 연결하고, Claude Code는 `/mcp`에서 상태를 확인합니다. 별도 인증을 추가한 서버라면 운영자의 안내를 따르세요.
 
 새 PC와 다른 AI 채팅 환경에서는 연결을 다시 추가하세요. 해제는 해당 서비스의 앱·MCP 설정에서 합니다. 작업의 임시 접근 정보나 결과를 다른 사람에게 공유하면 해당 자료에 접근할 수 있으므로 공유 범위를 확인하세요.
 
