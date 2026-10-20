@@ -97,3 +97,48 @@ test('application integration issues secure anonymous sessions and enforces CSRF
   assert.ok(!JSON.stringify(await (await app.fetch(new Request('https://hannoon.example/api/config'),env,ctx)).json()).includes(env.LLM_API_KEY));
   await Promise.all(pending);
 });
+
+test('MCP protocol integrates UI resources, capability-owned jobs, SVG output and source removal with actual D1',async t=>{
+  const env=await database(t),app=createApplication({}),ctx={waitUntil(){}};
+  let nextId=1,calls=0;const responses=[ir(),audit()];
+  t.mock.method(globalThis,'fetch',async(url,options)=>{
+    assert.match(String(url),/^https:\/\/generativelanguage\.googleapis\.com\//);
+    assert.equal(options.redirect,'manual');calls++;
+    assert.ok(responses.length,'No unexpected additional inference may be called');
+    return providerResponse(responses.shift());
+  });
+  const rpc=async(method,params={})=>{
+    const response=await app.fetch(new Request('https://hannoon.example/mcp',{method:'POST',headers:{'Content-Type':'application/json','CF-Connecting-IP':'198.41.220.1'},body:JSON.stringify({jsonrpc:'2.0',id:nextId++,method,params})}),env,ctx);
+    assert.equal(response.status,200);const message=await response.json();assert.equal(message.jsonrpc,'2.0');return message;
+  };
+  const initialized=(await rpc('initialize',{protocolVersion:'2025-11-25',capabilities:{},clientInfo:{name:'Protocol test',version:'1'}})).result;
+  assert.ok(initialized.capabilities.tools);assert.ok(initialized.capabilities.resources);
+  const listed=(await rpc('tools/list')).result.tools;
+  const get=listed.find(tool=>tool.name==='get_diagram');assert.ok(get);
+  const resourceURI=get._meta.ui.resourceUri;assert.equal(get._meta['openai/outputTemplate'],resourceURI);
+  const resources=(await rpc('resources/list')).result.resources;
+  assert.ok(resources.some(resource=>resource.uri===resourceURI));
+  const page=(await rpc('resources/read',{uri:resourceURI})).result.contents[0];
+  assert.equal(page.mimeType,'text/html;profile=mcp-app');assert.match(page.text,/<!doctype html>/i);
+  assert.ok(!page.text.includes(env.LLM_API_KEY));
+  assert.equal((await rpc('resources/read',{uri:'file:///private.env'})).error.code,-32602);
+
+  const created=(await rpc('tools/call',{name:'create_diagram',arguments:{source_text:SOURCE}})).result;
+  assert.equal(created.isError,false);const job=created.structuredContent;
+  assert.match(job.job_id,/^[a-f0-9]{32}$/);assert.ok(job.access_token.length>=32);assert.equal(calls,0);
+  const denied=(await rpc('tools/call',{name:'get_diagram',arguments:{job_id:job.job_id,access_token:'wrong-capability'}})).result;
+  assert.equal(denied.isError,true);assert.equal(calls,0);assert.ok(!JSON.stringify(denied).includes(SOURCE));
+  const args={job_id:job.job_id,access_token:job.access_token};
+  const pending=(await rpc('tools/call',{name:'get_diagram',arguments:args})).result;
+  assert.equal(pending.isError,false);assert.equal(pending.structuredContent.state,'running');assert.equal(calls,1);
+  const complete=(await rpc('tools/call',{name:'get_diagram',arguments:args})).result;
+  assert.equal(complete.isError,false);assert.equal(complete.structuredContent.status,'COMPLETED');
+  assert.equal(complete.structuredContent.review_required,false);assert.ok([...complete.structuredContent.one_sentence].length<=60);
+  const image=complete.content.find(item=>item.type==='image');assert.equal(image.mimeType,'image/svg+xml');
+  assert.equal(Buffer.from(image.data,'base64').toString('utf8'),complete._meta.svg);assert.match(complete._meta.svg,/<svg /);
+  assert.equal(calls,2);assert.ok(!JSON.stringify(complete).includes(job.access_token));assert.ok(!JSON.stringify(complete).includes(SOURCE));
+  const row=await env.DB.prepare('SELECT private_state,state FROM jobs WHERE id=?').bind(job.job_id).first();
+  assert.equal(row.private_state,null);assert.equal(row.state,'completed');assert.equal(await apiCount(env),2);
+  const deniedCompleted=(await rpc('tools/call',{name:'get_diagram',arguments:{job_id:job.job_id,access_token:'wrong-capability'}})).result;
+  assert.equal(deniedCompleted.isError,true);assert.ok(!JSON.stringify(deniedCompleted).includes('<svg'));
+});
