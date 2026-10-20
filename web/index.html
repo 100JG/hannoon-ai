@@ -1,0 +1,78 @@
+<!doctype html>
+<html lang="ko">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="복잡한 내용을 한 문장과 다이어그램으로 정리하는 한눈AI">
+  <meta name="theme-color" content="#2E49D3">
+  <title>한눈AI — 복잡한 내용도, 한눈에</title>
+  <link rel="icon" href="/assets/logo.svg" type="image/svg+xml">
+  <link rel="stylesheet" href="/assets/style.css">
+  <script type="module" src="/assets/app.js"></script>
+</head>
+<body>
+  <a class="skip-link" href="#source">본문으로 바로 가기</a>
+  <svg class="icon-defs" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+    <symbol id="i-arrow" viewBox="0 0 24 24"><path d="M5 12h14m-6-6 6 6-6 6"/></symbol>
+    <symbol id="i-plus" viewBox="0 0 24 24"><path d="M12 5v14M5 12h14"/></symbol>
+    <symbol id="i-close" viewBox="0 0 24 24"><path d="m6 6 12 12M6 18 18 6"/></symbol>
+    <symbol id="i-file" viewBox="0 0 24 24"><path d="M14 3H6a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V9Z"/><path d="M14 3v6h6M8 14h8M8 17h5"/></symbol>
+    <symbol id="i-copy" viewBox="0 0 24 24"><rect x="8" y="8" width="12" height="13" rx="2"/><path d="M15 8V5a2 2 0 0 0-2-2H5a2 2 0 0 0-2 2v8a2 2 0 0 0 2 2h3"/></symbol>
+    <symbol id="i-download" viewBox="0 0 24 24"><path d="M12 3v12m-5-5 5 5 5-5M4 16v3a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-3"/></symbol>
+    <symbol id="i-refresh" viewBox="0 0 24 24"><path d="M20 7v5h-5M4 17v-5h5"/><path d="M6.1 6.1A8 8 0 0 1 19.6 10M4.4 14a8 8 0 0 0 13.5 3.9"/></symbol>
+    <symbol id="i-book" viewBox="0 0 24 24"><path d="M12 5c-3-2-7-2-10 0v15c3-2 7-2 10 0 3-2 7-2 10 0V5c-3-2-7-2-10 0Zm0 0v15"/></symbol>
+    <symbol id="i-check" viewBox="0 0 24 24"><path d="m5 12 4 4L19 6"/></symbol>
+  </svg>
+  <header class="topbar">
+    <a class="brand" href="/" aria-label="한눈AI 홈"><img src="/assets/logo.svg" width="34" height="34" alt=""><span>한눈<span class="brand-ai">AI</span></span></a>
+    <nav class="topnav" aria-label="주 메뉴">
+      <a class="guide-link" href="/guide"><svg class="icon" aria-hidden="true"><use href="#i-book"/></svg>사용가이드</a>
+    </nav>
+  </header>
+  <main>
+    <section class="intro" aria-labelledby="page-title">
+      <p class="eyebrow"><span></span>복잡함을 이해로 바꾸는 한눈AI</p>
+      <h1 id="page-title">복잡한 내용도,<br class="mobile-break"> <span>한눈에.</span></h1>
+      <p class="intro-copy">긴 글부터 문서까지. 핵심은 한 문장으로,<br class="mobile-break"> 관계는 다이어그램으로 정리하세요.</p>
+    </section>
+    <div class="workspace">
+      <section class="input-panel panel" aria-labelledby="input-heading">
+        <div class="panel-heading"><div><span class="step-number">01</span><h2 id="input-heading">내용 입력</h2></div><button id="clear-button" class="text-button" type="button" disabled>지우기</button></div>
+        <p class="panel-description">정리할 텍스트나 웹페이지 주소를 넣어주세요.</p>
+        <div class="textarea-wrap">
+          <label class="sr-only" for="source">정리할 텍스트 또는 웹페이지 URL</label>
+          <textarea id="source" spellcheck="false" aria-describedby="counter input-warning" placeholder="텍스트 또는 URL을 붙여넣으세요.&#10;&#10;업무 흐름, 비교할 정보, 시간에 따른 변화…&#10;내용에 맞는 다이어그램을 찾아드립니다."></textarea>
+          <div class="textarea-footer"><span id="source-kind">텍스트 · URL</span><span id="counter">0 / 12,000</span></div>
+        </div>
+        <input type="file" id="source-file" accept=".txt,.docx,.html,.htm,.hwpx,.pdf" hidden>
+        <button id="choose-file" class="file-button" type="button"><svg class="icon" aria-hidden="true"><use href="#i-plus"/></svg>파일 선택<span>최대 10 MB</span></button>
+        <p class="file-hint">txt, docx, html, hwpx, pdf(텍스트로 인식되지 않는 이미지형 PDF 파일은 제외)</p>
+        <div id="selected-file" class="selected-file" hidden>
+          <span class="file-icon"><svg class="icon" aria-hidden="true"><use href="#i-file"/></svg></span>
+          <div class="file-information"><strong id="file-name"></strong><span id="file-status" role="status"></span></div>
+          <button id="remove-file" class="icon-button" type="button" aria-label="선택한 파일 지우기"><svg class="icon" aria-hidden="true"><use href="#i-close"/></svg></button>
+        </div>
+        <p id="input-warning" class="input-warning" role="status" hidden></p>
+        <button id="generate" class="primary-button" type="button" disabled><span id="generate-label">다이어그램 만들기</span><svg class="icon" aria-hidden="true"><use href="#i-arrow"/></svg></button>
+        <div id="progress" class="progress" role="status" aria-live="polite" hidden><span class="spinner" aria-hidden="true"></span><span id="progress-text"></span></div>
+        <p id="notice" class="notice" role="status" aria-live="polite" hidden></p>
+        <p id="session-hint" class="session-hint">내용에 맞는 다이어그램을 자동으로 선택합니다.</p>
+      </section>
+      <section class="result-panel panel" aria-labelledby="result-heading" aria-busy="false">
+        <div class="panel-heading"><div><span class="step-number">02</span><h2 id="result-heading">한눈에 보기</h2></div><button id="regenerate" class="text-button" type="button" hidden><svg class="icon" aria-hidden="true"><use href="#i-refresh"/></svg>다시 생성하기</button></div>
+        <div id="empty" class="empty-state">
+          <svg class="empty-illustration" viewBox="0 0 228 164" fill="none" aria-hidden="true"><rect x="79" y="6" width="70" height="40" rx="10" fill="#EEF1FF" stroke="#2E49D3" stroke-width="1.5"/><path d="M114 47v22m-72 22V69h144v22M114 69v22" stroke="#C4CCF5" stroke-width="1.5"/><rect x="6" y="91" width="72" height="44" rx="10" fill="white" stroke="#DDE2F8" stroke-width="1.5"/><rect x="78" y="91" width="72" height="44" rx="10" fill="white" stroke="#DDE2F8" stroke-width="1.5"/><rect x="150" y="91" width="72" height="44" rx="10" fill="white" stroke="#DDE2F8" stroke-width="1.5"/><path d="M99 26h30M25 109h34m-27 9h20m45-9h34m-27 9h20m45-9h34m-27 9h20" stroke="#CBD2EC" stroke-width="2" stroke-linecap="round"/><circle cx="169" cy="33" r="4" fill="#DCE2FF"/><circle cx="55" cy="149" r="3" fill="#DCE2FF"/></svg>
+          <h3>핵심이 보이는 순간</h3><p>내용을 입력하면 한 문장 요약과<br>알맞은 다이어그램이 여기에 나타납니다.</p><span class="empty-caption">흐름 · 비교 · 구조 · 시간 · 관계</span>
+        </div>
+        <div id="outputs" hidden aria-live="polite">
+          <section class="summary-section" aria-labelledby="summary-heading"><h3 id="summary-heading">한 문장 요약</h3><p id="one-sentence"></p></section>
+          <figure class="diagram-section"><figcaption>결과 다이어그램</figcaption><div class="diagram-surface"><img id="diagram" alt="입력 내용을 정리한 다이어그램"></div></figure>
+        </div>
+        <div id="result-footer" class="result-footer" hidden><p id="verification-note" hidden>일부 내용은 원문과 함께 확인하면 더 정확합니다.</p><div class="result-actions"><button id="copy-image" class="secondary-button" type="button"><svg class="icon" aria-hidden="true"><use href="#i-copy"/></svg>이미지 복사</button><button id="download-image" class="secondary-button" type="button"><svg class="icon" aria-hidden="true"><use href="#i-download"/></svg>PNG 다운로드</button></div></div>
+        <p id="result-message" class="result-message" role="status" aria-live="polite" hidden></p>
+      </section>
+    </div>
+  </main>
+  <footer class="site-footer"><span>한 문장과 한 장으로, 더 명확하게.</span><div><a href="/guide">사용가이드</a><a href="/privacy">개인정보 안내</a></div></footer>
+</body>
+</html>

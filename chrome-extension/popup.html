@@ -1,0 +1,20 @@
+<!doctype html>
+<html lang="ko">
+<head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>한눈AI</title><link rel="stylesheet" href="popup.css"><script type="module" src="popup.js"></script></head>
+<body>
+<header><a id="brand" class="brand" href="#"><img src="icons/32.png" width="30" height="30" alt=""><strong>한눈<span>AI</span></strong></a><a id="open-web" class="open-web" href="#">크게 보기 <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M14 4h6v6M20 4l-9 9M10 5H5v14h14v-5"/></svg></a></header>
+<main>
+<section class="intro"><p class="eyebrow">한눈에 이해하는 새로운 방법</p><h1>읽는 시간을 줄이고,<br>핵심을 한눈에.</h1><p>현재 페이지나 자료를 한 문장과 다이어그램으로 정리하세요.</p></section>
+
+<section class="input-card" aria-label="원문 입력">
+<div class="section-head"><h2>무엇을 정리할까요?</h2><button id="clear" class="quiet-button">지우기</button></div>
+<label for="input-mode" class="sr-only">입력 방식</label><select id="input-mode"><option value="page">현재 페이지</option><option value="text">텍스트 · URL</option><option value="file">파일</option></select>
+<p id="page-hint" class="hint">지금 보고 있는 페이지의 본문을 읽어 정리합니다.</p>
+<div id="text-wrap" hidden><label class="sr-only" for="source">텍스트 또는 URL</label><textarea id="source" placeholder="정리할 텍스트 또는 웹페이지 주소를 붙여넣으세요."></textarea><p id="counter" class="counter">0 / 12,000자</p></div>
+<div id="file-wrap" hidden><input id="source-file" type="file" accept=".txt,.docx,.html,.htm,.hwpx,.pdf" hidden><button id="choose-file" class="file-button"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 16V4m-4 4 4-4 4 4M4 15v5h16v-5"/></svg><span>파일 선택</span></button><div id="file-ready" class="file-ready" hidden><svg viewBox="0 0 24 24" aria-hidden="true"><path d="m5 12 4 4L19 6"/></svg><div><strong id="file-name"></strong><span id="file-size"></span></div></div><p class="hint file-hint">txt, docx, html, hwpx, pdf(텍스트로 인식되지 않는 이미지형 PDF 파일은 제외)</p></div>
+<button id="generate" class="primary">현재 페이지 정리하기 <span aria-hidden="true">↗</span></button>
+<p id="progress" class="progress" role="status" aria-live="polite" hidden></p><p id="notice" class="notice" role="alert" hidden></p>
+</section>
+<section id="results" class="results" aria-label="정리 결과" hidden><div class="section-head"><span class="eyebrow">한 문장 요약</span><button id="regenerate" class="quiet-button">다시 생성하기</button></div><p id="summary" class="summary"></p><figure><figcaption>결과 다이어그램</figcaption><img id="diagram" alt="입력 내용을 정리한 다이어그램"></figure><div class="result-actions"><button id="copy-image" class="small-button"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M8 8h12v12H8zM4 16V4h12"/></svg>이미지 복사</button><button id="download-image" class="small-button"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3v12m-4-4 4 4 4-4M4 16v5h16v-5"/></svg>PNG 다운로드</button></div><p id="review-note" class="review-note" hidden>몇몇 표현은 원문과 함께 살펴보면 더 정확합니다.</p></section>
+<footer><a id="guide" href="#">사용가이드</a><span>·</span><a id="privacy" href="#">개인정보 안내</a></footer>
+</main></body></html>

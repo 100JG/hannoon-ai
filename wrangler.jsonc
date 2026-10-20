@@ -1,0 +1,21 @@
+{
+  "$schema": "node_modules/wrangler/config-schema.json",
+  "name": "hannoon-ai",
+  "main": "dist/server/index.js",
+  "compatibility_date": "2026-10-20",
+  "workers_dev": true,
+  "observability": {"enabled": false},
+  "d1_databases": [{
+    "binding": "DB",
+    "database_name": "hannoon-ai",
+    "database_id": "00000000-0000-4000-8000-000000000000",
+    "migrations_dir": "drizzle"
+  }],
+  "triggers": {"crons": ["0 * * * *"]},
+  "vars": {
+    "SESSION_DAILY_LIMIT": "5",
+    "IP_DAILY_LIMIT": "15",
+    "GLOBAL_DAILY_LIMIT": "30",
+    "API_DAILY_LIMIT": "60"
+  }
+}

@@ -1,0 +1,29 @@
+{
+  "name": "hannoon-ai",
+  "version": "2.0.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "build": "node scripts/build-file-input.mjs && node scripts/build-mcp-view.mjs && node scripts/build.mjs",
+    "test": "node --test tests/*.test.mjs chrome-extension/tests/*.test.mjs",
+    "dev": "wrangler dev --local",
+    "deploy": "wrangler deploy"
+  },
+  "dependencies": {
+    "fflate": "^0.8.3",
+    "pdfjs-dist": "^6.4.299"
+  },
+  "overrides": {
+    "@esbuild-kit/core-utils": {
+      "esbuild": "0.25.12"
+    }
+  },
+  "devDependencies": {
+    "@modelcontextprotocol/ext-apps": "^2.0.3",
+    "@xmldom/xmldom": "^0.9.12",
+    "drizzle-kit": "^0.31.11",
+    "drizzle-orm": "^0.45.4",
+    "esbuild": "^0.28.2",
+    "wrangler": "^4.151.2"
+  }
+}
